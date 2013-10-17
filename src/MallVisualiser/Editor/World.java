@@ -1,6 +1,8 @@
 package MallVisualiser.Editor;
 
 import MallVisualiser.Assets;
+import MallVisualiser.AntSimulator.Ant;
+import MallVisualiser.AntSimulator.AntManager;
 import framework.Camera;
 import framework.Graphics;
 import framework.Pixmap;
@@ -32,11 +34,16 @@ public class World {
 	public int startTile_y = -1;
 	public int endTile_x = -1;
 	public int endTile_y = -1;
+	
+	// if simulating
+	private boolean simulating = false;
+	private AntManager man;
 
 
 
 	protected World(int sizeX, int sizeY){
 		world = new int[sizeX][sizeY];
+		man = new AntManager(this, 10, 100);
 	}
 
 	public void build(int x, int y){
@@ -76,7 +83,7 @@ public class World {
 	}
 
 	public boolean isAccessible(int x, int y) {
-		if(x<world.length && y<world[x].length)
+		if(x >= 0 && y >= 0 && x<world.length && y<world[x].length)
 			return world[x][y] == 1;
 		return false;
 	}
@@ -96,15 +103,23 @@ public class World {
 				}
 			}
 
-			//
-
 			// special tiles
 			if (startTile_x != -1)
-				g.drawRect((startTile_x * width), (startTile_y * height), width, height, 0, 0, 255, 100, cam);
+				g.drawRect((startTile_x * width), (startTile_y * height), width, height, 255, 0, 0, 100, cam);
 
 			if (endTile_x != -1)
-				g.drawRect((endTile_x * width), (endTile_y * height), width, height, 0, 0, 255, 100, cam);
+				g.drawRect((endTile_x * width), (endTile_y * height), width, height, 0, 255, 0, 100, cam);
 
+			// ant update
+			if (simulating) {
+				man.update();
+				for(Ant a: man.ants) {
+					g.drawRect((a.x * width), (a.y * height), width, height, 0, 0, 0, 255, cam);
+				}
+			}
+			
+			
+			
 			/*
 			 * Anti-aliasing painting:
 			 */
@@ -197,6 +212,15 @@ public class World {
 	public void selectTile(int x, int y){
 		selectedTile_x = (int)(x/width);
 		selectedTile_y = (int)(y/height);
+	}
+	
+	public void toggleSimulate() {
+		if (simulating) {
+			simulating = false;
+		} else {
+			man.reset();
+			simulating = true;
+		}
 	}
 
 	public String toString(){
