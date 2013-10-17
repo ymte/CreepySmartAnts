@@ -3,6 +3,8 @@ package MallVisualiser.Editor;
 import MallVisualiser.Assets;
 import MallVisualiser.AntSimulator.Ant;
 import MallVisualiser.AntSimulator.AntManager;
+import MallVisualiser.AntSimulator.Main;
+import MallVisualiser.AntSimulator.Node;
 import framework.Camera;
 import framework.Graphics;
 import framework.Pixmap;
@@ -30,10 +32,7 @@ public class World {
 	private int selectedTile_y = -1;
 
 	// start & end coordinates
-	public int startTile_x = -1;
-	public int startTile_y = -1;
-	public int endTile_x = -1;
-	public int endTile_y = -1;
+	public Node start, end;
 	
 	// if simulating
 	private boolean simulating = false;
@@ -42,8 +41,10 @@ public class World {
 
 
 	protected World(int sizeX, int sizeY){
+		start = new Node(-1, -1);
+		end = new Node(-1, -1);
 		world = new int[sizeX][sizeY];
-		man = new AntManager(this, 10, 100);
+		man = new AntManager(this, 10, 200);
 	}
 
 	public void build(int x, int y){
@@ -104,17 +105,17 @@ public class World {
 			}
 
 			// special tiles
-			if (startTile_x != -1)
-				g.drawRect((startTile_x * width), (startTile_y * height), width, height, 255, 0, 0, 100, cam);
+			if (start.getColumn() != -1)
+				g.drawRect((start.getColumn() * width), (start.getRow() * height), width, height, 255, 0, 0, 100, cam);
 
-			if (endTile_x != -1)
-				g.drawRect((endTile_x * width), (endTile_y * height), width, height, 0, 255, 0, 100, cam);
+			if (end.getColumn() != -1)
+				g.drawRect((end.getColumn() * width), (end.getRow() * height), width, height, 0, 255, 0, 100, cam);
 
 			// ant update
 			if (simulating) {
 				man.update();
 				for(Ant a: man.ants) {
-					g.drawRect((a.x * width), (a.y * height), width, height, 0, 0, 0, 255, cam);
+					g.drawRect((a.loc.getColumn() * width), (a.loc.getRow() * height), width, height, 0, 0, 0, 255, cam);
 				}
 			}
 			
@@ -181,12 +182,13 @@ public class World {
 
 	public void renewWorld(int sizeX, int sizeY){
 		if(sizeX >= 0 && sizeY >= 0){
-			world = new int[sizeX][sizeY];
+			world = new int[sizeX][sizeY];	
 		}
 	}
 
 	public void renewWorld(int[][] world){
-		this.world = world;
+		this.world = world;		
+		Main.main2(this);
 	}
 
 	public void resizeWorld(int sizeX, int sizeY){

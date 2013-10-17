@@ -9,17 +9,23 @@ public class AntManager {
 	public List<Ant> ants;
 	private int ticksPerCycle;
 	private int ticks;
+	private World world;
+	private int numAnts;
 	
 	public AntManager(World world, int fps, int numAnts) {
+		this.world = world;
 		ticksPerCycle = 60 / fps;
-		ants = new LinkedList<Ant>();
-		for(int i = 0; i < 10; i++)
-			ants.add(new Ant(world, world.startTile_x, world.startTile_y));
+		this.numAnts = numAnts;
+		reset();
 	}
 	
-	public void reset() {		
-		for(Ant a: ants)
-			a.reset();
+	public void reset() {
+		ants = new LinkedList<Ant>();
+		for(int i = 0; i < numAnts; i++) {
+			Node start = world.start;
+			Node end = world.end;
+			ants.add(new Ant(start, end, 1, 1));
+		}
 	}
 	
 	public void update() {

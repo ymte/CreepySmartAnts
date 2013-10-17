@@ -1,4 +1,4 @@
-package ci.assignment3;
+package MallVisualiser.AntSimulator;
 
 import java.util.ArrayList;
 

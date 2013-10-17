@@ -6,6 +6,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
+import MallVisualiser.AntSimulator.Node;
+
 import framework.FileIO;
 
 public class WorldIO {
@@ -112,10 +114,12 @@ public class WorldIO {
 			while((c2 = (char) fr.read()) != ';') end2 += c2;
 			
 			// parse coordinates
-			world.startTile_x = Integer.parseInt(start1);
-			world.startTile_y = Integer.parseInt(start2);
-			world.endTile_x = Integer.parseInt(end1);
-			world.endTile_y = Integer.parseInt(end2);
+			int startX = Integer.parseInt(start1);
+			int startY = Integer.parseInt(start2);
+			int endX = Integer.parseInt(end1);
+			int endY = Integer.parseInt(end2);
+			world.start = new Node(startX, startY);
+			world.end = new Node(endX, endY);
 			
 			// close
 			fr.close();
