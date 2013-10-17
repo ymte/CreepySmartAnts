@@ -2,7 +2,6 @@ package MallVisualiser.Editor;
 
 import java.awt.Frame;
 import java.io.File;
-import java.io.IOException;
 
 import javax.swing.JFileChooser;
 
@@ -61,7 +60,8 @@ public class EditorButton extends Button{
 		ResizeMap,
 		SaveMap,
 		LoadMap,
-		toMenu
+		toMenu,
+		Simulate,
 	}
 	
 	private ButtonType type;
@@ -89,15 +89,18 @@ public class EditorButton extends Button{
 				int returnVal = world_fc.showOpenDialog(null);
 				if (returnVal == JFileChooser.APPROVE_OPTION) {
 					worldIO.load(world_fc.getSelectedFile());
-		        }
-				
+		        }				
 			}
 			
 			//Back-to-menu:
 			if(this.type == ButtonType.toMenu){
 				toMenuDialog.setVisible(true);
-			}			
+			}
 			
+			//Simulate:
+			if(this.type == ButtonType.Simulate){
+				worldIO.world.toggleSimulate();
+			}			
 		}
 	}
 	
