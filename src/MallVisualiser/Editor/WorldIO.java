@@ -1,7 +1,7 @@
 package MallVisualiser.Editor;
 
 import java.io.File;
-import java.io.FileInputStream;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -16,6 +16,10 @@ public class WorldIO {
 	public WorldIO(World world, FileIO fileIO){
 		this.world = world;
 		this.fileIO = fileIO;
+	}
+	
+	public void toggleSimulate() {
+		world.toggleSimulate();
 	}
 
 	public boolean load(File file){
@@ -94,7 +98,27 @@ public class WorldIO {
 			}
 
 			// read coords
-			FileInputStream fis = new FileInputStream(new File(""));
+			File file2 = new File(file.getAbsolutePath() + " coordinates.txt");
+			FileReader fr = new FileReader(file2);
+			String start1 = "", start2 = "";
+			String end1 = "", end2 = "";
+			char c2 = 0;
+			while((c2 = (char) fr.read()) != ',') start1 += c2;
+			fr.skip(1); // space
+			while((c2 = (char) fr.read()) != ';') start2 += c2;
+			fr.skip(2); // newline
+			while((c2 = (char) fr.read()) != ',') end1 += c2;
+			fr.skip(1); // space
+			while((c2 = (char) fr.read()) != ';') end2 += c2;
+			
+			// parse coordinates
+			world.startTile_x = Integer.parseInt(start1);
+			world.startTile_y = Integer.parseInt(start2);
+			world.endTile_x = Integer.parseInt(end1);
+			world.endTile_y = Integer.parseInt(end2);
+			
+			// close
+			fr.close();
 
 			world.renewWorld(worldArray);
 			worldArray = null;

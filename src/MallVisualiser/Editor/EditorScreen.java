@@ -67,7 +67,7 @@ public class EditorScreen extends Screen {
         toggleButtons[1].registerSharedToggles(sharedToggles);
         sharedToggles = null;
         
-        buttons = new Button[5];
+        buttons = new Button[6];
         {
 	        buttons[0] = new EditorButton(
 	        		ButtonType.NewMap,
@@ -79,6 +79,18 @@ public class EditorScreen extends Screen {
 	        		);
 	    	buttons[0].w = 50;
 	    	buttons[0].h = 50;
+        }
+        {
+	        buttons[5] = new EditorButton(
+	        		ButtonType.Simulate,
+	        		game,
+	        		Assets.editorSimulateIcon,
+	        		824+25+50+25,
+	        		700,
+	        		worldIO
+	        		);
+	    	buttons[5].w = 50;
+	    	buttons[5].h = 50;
         }
         {
 	        buttons[4] = new EditorButton(

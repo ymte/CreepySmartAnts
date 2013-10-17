@@ -20,6 +20,7 @@ public class Assets {
     public static Pixmap editorLoadMapIcon;
     public static Pixmap editorSaveMapIcon;
     public static Pixmap editorToMenuIcon;
+    public static Pixmap editorSimulateIcon;
 
     public static Pixmap visualiserRouteGround0;
     public static Pixmap visualiserRouteGround1;
