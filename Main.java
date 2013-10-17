@@ -28,6 +28,8 @@ public class Main {
 	static int ants=10;
 	static double pheremoneDropped=1;
 	static double evaporationRate=0.9;
+	static double a=1;
+	static double b=1;
 	static ArrayList<Node> nodes=new ArrayList<>();
 	
 	
@@ -48,29 +50,41 @@ public class Main {
 		}
 		linkNodes(startNode);
 		if (!endNode.getNodes().isEmpty()){
+			ArrayList<Node> bestPath;
+			int bestLength=Integer.MAX_VALUE;
 			for (int i=0;i<maxIterations;i++){
-				iteration(startNode,endNode);
+				ArrayList<Node> path=iteration(startNode,endNode);
+				int length=0;
+				for (int k=0;k<path.size()-1;k++){
+					length+=path.get(k).getLength(path.get(k+1));
+				}
+				if (length<bestLength){
+					bestLength=length;
+					bestPath=path;
+				}
 			}
-			//savePath("C:\\Users\\Tom\\Dropbox\\Intelligence Practicum\\Practicum 3\\GradingMaze EASY v2 solution.txt",getPath(startNode,endNode));
+			//savePath("C:\\Users\\Tom\\Dropbox\\Intelligence Practicum\\Practicum 3\\GradingMaze EASY v2 solution.txt",bestPath);
 		} else {
 			System.out.println("No path to end point");
 		}
 	}
 	
-	private static void iteration(Node start, Node end){
-		ArrayList<ArrayList<Node>> paths= new ArrayList<>();
+	private static ArrayList<Node> iteration(Node start, Node end){
+		ArrayList<ArrayList<Node>> paths=new ArrayList<>();
 		for (int i=0;i<ants;i++){
-			Ant ant=new Ant(start,end);
+			Ant ant=new Ant(start,end,a,b);
 			paths.add(ant.getPath());
-		}
-		for (int i=0;i<paths.size();i++){
-			for (int k=1;k<paths.get(i).size();k++){
-				paths.get(i).get(k).dropPheremone(pheremoneDropped);
-			}
 		}
 		for (int i=0;i<nodes.size();i++){
 			nodes.get(i).evaporatePheremone(evaporationRate);
 		}
+		for (int i=0;i<paths.size();i++){
+			for (int k=0;k<paths.get(i).size()-1;k++){
+				paths.get(i).get(k).dropPheremone(pheremoneDropped,paths.get(i).get(k+1));
+				paths.get(i).get(k+1).dropPheremone(pheremoneDropped,paths.get(i).get(k));
+			}
+		}
+		return paths.get(0);
 	}
 	
 	private static void loadMap(String filename){
@@ -117,10 +131,6 @@ public class Main {
 		} catch (IOException ex) {
 			Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
 		}
-	}
-
-	private static ArrayList<Node> getPath(Node start, Node end) {
-		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
 	}
 	
 	private static void createNodes(){
