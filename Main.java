@@ -50,7 +50,7 @@ public class Main {
 		}
 		linkNodes(startNode);
 		if (!endNode.getNodes().isEmpty()){
-			ArrayList<Node> bestPath;
+			ArrayList<Node> bestPath = null;
 			int bestLength=Integer.MAX_VALUE;
 			for (int i=0;i<maxIterations;i++){
 				ArrayList<Node> path=iteration(startNode,endNode);
@@ -63,6 +63,7 @@ public class Main {
 					bestPath=path;
 				}
 			}
+			System.out.println("("+bestPath.get(bestPath.size()-1).getColumn()+","+bestPath.get(bestPath.size()-1).getRow()+")");
 			//savePath("C:\\Users\\Tom\\Dropbox\\Intelligence Practicum\\Practicum 3\\GradingMaze EASY v2 solution.txt",bestPath);
 		} else {
 			System.out.println("No path to end point");

@@ -17,12 +17,14 @@ public class Ant {
 		path.add(start);
 		Node loc=start;
 		Node prevLoc=start;
+		int steps=0;
 		while (loc!=end){
 			ArrayList<Node> locNodes=loc.getNodes();
+			locNodes.remove(prevLoc);
 			ArrayList<Double> x = new ArrayList<>();
 			Double sum=0.0;
 			for (int i=0;i<locNodes.size();i++){
-				x.add(a*loc.getPheremone(i)+b*loc.getLength(i));
+				x.add(a*loc.getPheremone(locNodes.get(i))+b*loc.getLength(locNodes.get(i)));
 				sum+=x.get(i);
 			}
 			ArrayList<Double> p = new ArrayList<>();
@@ -38,6 +40,11 @@ public class Ant {
 				}
 			}
 			path.add(loc);
+			System.out.println("("+loc.getColumn()+","+loc.getRow()+")");
+			steps++;
+			if (steps>10000){
+				break;
+			}
 		}
 	}
 	

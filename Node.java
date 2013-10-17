@@ -53,6 +53,15 @@ public class Node {
 	public Double getPheremone(int i){
 		return pheremone.get(i);
 	}
+	
+	public Double getPheremone(Node node){
+		for (int i=0;i<nodes.size();i++){
+			if (nodes.get(i)==node){
+				return pheremone.get(i);
+			}
+		}
+		return 0.0;
+	}
 
 	public double getLength(int i) {
 		return distance.get(i);
